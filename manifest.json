@@ -8,12 +8,13 @@
   "background_color": "#020711",
   "theme_color": "#062e50",
   "icons": [
-    {
-      "src": "/Jarvis-ai/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
+  {
+    "src": "IMG_20261112_222224.jpg",
+    "sizes": "512x512",
+    "type": "image/jpeg",
+    "purpose": "any"
+  }
+  ]
     {
       "src": "/Jarvis-ai/icon-512.png",
       "sizes": "512x512",
