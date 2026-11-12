@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="100"
+        fill="#020711"/>
+  <circle cx="256" cy="256" r="155"
+          fill="none" stroke="#00cfff"
+          stroke-width="16"/>
+  <circle cx="256" cy="256" r="105"
+          fill="#063b60" stroke="#8cecff"
+          stroke-width="10"/>
+  <circle cx="256" cy="256" r="55"
+          fill="#00cfff"/>
+  <path d="M256 100 V145 M256 367 V412
+           M100 256 H145 M367 256 H412"
+        stroke="#8cecff" stroke-width="12"
+        stroke-linecap="round"/>
+  <text x="256" y="278" text-anchor="middle"
+        font-size="54" font-family="Arial"
+        font-weight="bold" fill="#ffffff">J</text>
+</svg>
