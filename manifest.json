@@ -1,0 +1,9 @@
+{"name": "JARVIS AI",
+  "short_name": "JARVIS",
+  "description": "Your Personal AI Assistant",
+  "start_url": "/Jarvis-ai/",
+  "scope": "/Jarvis-ai/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#020711",
+  "theme_color": "#062e50"}
