@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JARVIS AI</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at center,
+    #102e50, #020711 70%);
+  color: #62dfff;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 25px 16px;
+}
+
+h1 {
+  letter-spacing: 8px;
+  text-shadow: 0 0 18px #00cfff;
+  margin-top: 20px;
+}
+
+.status {
+  color: #9bc9dc;
+  margin: 15px;
+}
+
+.circle {
+  width: 210px;
+  height: 210px;
+  border: 3px solid #16cfff;
+  border-radius: 50%;
+  margin: 35px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px #00bfff,
+              inset 0 0 25px #0077aa;
+  animation: glow 3s infinite alternate;
+}
+
+.core {
+  width: 130px;
+  height: 130px;
+  border: 3px solid #8cecff;
+  border-radius: 50%;
+  background: radial-gradient(#00aaff, #001c40);
+  box-shadow: 0 0 30px #00cfff;
+}
+
+@keyframes glow {
+  from { transform: scale(1); }
+  to { transform: scale(1.06); }
+}
+
+button {
+  background: #063b60;
+  color: #8eeaff;
+  border: 1px solid #00cfff;
+  padding: 14px 20px;
+  margin: 7px;
+  border-radius: 25px;
+  font-size: 15px;
+}
+
+button:active {
+  background: #0879a8;
+}
+
+input {
+  width: 85%;
+  max-width: 400px;
+  padding: 14px;
+  border-radius: 20px;
+  border: 1px solid #00cfff;
+  background: #071a2d;
+  color: white;
+  margin-top: 15px;
+}
+
+.panel {
+  max-width: 450px;
+  margin: 20px auto;
+  padding: 18px;
+  border: 1px solid #087da8;
+  border-radius: 15px;
+  background: #061525;
+  text-align: left;
+  min-height: 100px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+#answer { color: white; }
+#heard { color: #62dfff; }
+</style>
+</head>
+
+<body>
+
+<h1>J.A.R.V.I.S</h1>
+<p class="status">PERSONAL AI ASSISTANT</p>
+
+<div class="circle">
+  <div class="core"></div>
+</div>
+
+<p id="status">SYSTEM ONLINE</p>
+
+<button onclick="startListening()">🎙 SPEAK</button>
+<button onclick="stopListening()">STOP</button>
+
+<div class="panel">
+  <b>YOU SAID:</b>
+  <p id="heard">Waiting for command...</p>
+  <b>JARVIS:</b>
+  <p id="answer">Good day! I am JARVIS. How may I help you?</p>
+</div>
+
+<input id="message" placeholder="Type your command here...">
+
+<br>
+<button onclick="sendMessage()">SEND COMMAND</button>
+
+<script>
+const statusText = document.getElementById("status");
+const heard = document.getElementById("heard");
+const answer = document.getElementById("answer");
+
+let recognition;
+let listening = false;
+
+function speak(text) {
+  speechSynthesis.cancel();
+
+  const speech = new SpeechSynthesisUtterance(text);
+  speech.lang = "en-IN";
+  speech.rate = 0.95;
+  speech.pitch = 0.85;
+
+  const voices = speechSynthesis.getVoices();
+
+  const maleVoice = voices.find(v =>
+    /male/i.test(v.name) &&
+    /en/i.test(v.lang)
+  );
+
+  const indianVoice = voices.find(v =>
+    /en-IN/i.test(v.lang)
+  );
+
+  speech.voice = maleVoice || indianVoice || null;
+
+  speechSynthesis.speak(speech);
+}
+
+function respond(text) {
+  answer.innerText = text;
+  speak(text);
+}
+
+function processCommand(command) {
+  const q = command.toLowerCase().trim();
+
+  heard.innerText = command;
+
+  if (q.includes("hello") || q.includes("hi jarvis")) {
+    respond("Hello! I am JARVIS. I am ready to assist you.");
+  }
+
+  else if (q.includes("your name") || q.includes("who are you")) {
+    respond("I am JARVIS, your personal voice assistant.");
+  }
+
+  else if (q.includes("time")) {
+    const t = new Date().toLocaleTimeString("en-IN");
+    respond("The current time is " + t);
+  }
+
+  else if (q.includes("date") || q.includes("today")) {
+    const d = new Date().toDateString();
+    respond("Today's date is " + d);
+  }
+
+  else if (q.includes("how are you")) {
+    respond("All systems are running. I am ready to help.");
+  }
+
+  else if (q.includes("thank")) {
+    respond("You are welcome. Always happy to assist.");
+  }
+
+  else if (q.includes("open youtube")) {
+    respond("Opening YouTube.");
+    window.open("https://www.youtube.com", "_blank");
+  }
+
+  else if (q.includes("search")) {
+    const search = q.replace("search", "").trim();
+    if (search) {
+      respond("Searching the internet for " + search);
+      window.open(
+        "https://www.google.com/search?q=" +
+        encodeURIComponent(search), "_blank"
+      );
+    } else {
+      respond("Please tell me what you want to search.");
+    }
+  }
+
+  else if (q.includes("help")) {
+    respond("You can ask me for the time, date, greetings, or to open YouTube and search the internet.");
+  }
+
+  else {
+    respond("I have not learned that command yet. Try saying help.");
+  }
+}
+
+function startListening() {
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    respond("Voice recognition is not supported in this browser. Please try Chrome.");
+    return;
+  }
+
+  recognition = new SpeechRecognition();
+  recognition.lang = "en-IN";
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  recognition.onstart = function() {
+    listening = true;
+    statusText.innerText = "LISTENING...";
+  };
+
+  recognition.onresult = function(event) {
+    const text = event.results[0][0].transcript;
+    processCommand(text);
+  };
+
+  recognition.onerror = function() {
+    statusText.innerText = "VOICE ERROR - TRY AGAIN";
+  };
+
+  recognition.onend = function() {
+    listening = false;
+    statusText.innerText = "SYSTEM ONLINE";
+  };
+
+  recognition.start();
+}
+
+function stopListening() {
+  if (recognition && listening) {
+    recognition.stop();
+  }
+  speechSynthesis.cancel();
+  statusText.innerText = "SYSTEM ONLINE";
+}
+
+function sendMessage() {
+  const input = document.getElementById("message");
+  const text = input.value.trim();
+
+  if (text) {
+    processCommand(text);
+    input.value = "";
+  }
+}
+
+document.getElementById("message")
+.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") sendMessage();
+});
+</script>
+
+</body>
+  </html>
+  
