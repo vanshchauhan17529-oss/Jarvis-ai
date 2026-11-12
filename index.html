@@ -291,6 +291,22 @@ document.getElementById("message")
 });
 </script>
 
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register(
+      "/Jarvis-ai/service-worker.js"
+    )
+    .then(() => {
+      console.log("JARVIS is ready!");
+    })
+    .catch((error) => {
+      console.error("Service Worker error:", error);
+    });
+  });
+}
+</script>
+  
 </body>
   </html>
   
